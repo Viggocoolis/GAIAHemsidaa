@@ -1,0 +1,7 @@
+body { font-family: system-ui, Arial; background:#0b1220; color: #e8eefc; margin: 0;}
+.container { max-width: 900px; margin: 40px auto; padding: 0 16px; }
+.card { background: #121b2f; padding: 16px; border-radius: 12px; margin:16px 0; }
+label { display: block; margin-top: 12px; opacity: 0.9; }
+select, textarea, button {width: 100%; margin-top: 6px; border-radius: 10px; border: 1px solid #2a3a66; background: #0f1730; color: #e8eefc; padding: 10px;}
+button { cursor: pointer; font-weight: 700; margin-top: 14px;}
+.answer { white-space: pre-wrap; }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang = "sv">
+    <head>
+        <meta charset = "utf-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Matte Helper</title>
+        <link rel="stylesheet" href="styles.css"/>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Matte Helper</h1>
+            <p>Ett verktyg för att hjälpa dig med matte.</p>
+
+            <section class="card">
+                <label>Nivå</label>
+                <select id="level">
+                    <option>Grundskola åk 1-3</option>
+                    <option>Grundskola åk 4-6</option>
+                    <option>Grundskola åk 7-9</option>
+                    <option>Gymnasiet Matte 1</option>
+                    <option>Gymnasiet Matte 2</option>
+                    <option>Gymnasiet Matte 3</option>
+                    <option>Gymnasiet Matte 4</option>
+                    <option>Gymnasiet Matte 5</option>
+                </select>
+
+                <label>AI-läge</label>
+                <select id="mode">
+                    <option value="simplify">Förenkla uppgiften</option>
+                    <option value="hint">Ge en hint</option>
+                    <option value="check">Kolla mitt försök</option>
+                </select>
+
+                <label>Uppgift</label>
+                <textarea id="problem" rows="5" placeholder="Skriv in din matteuppgift här..."></textarea>
+
+                <label>Ditt försök</label>
+                <textarea id="attempt" rows="4" placeholder="Skriv hur du försökte lösa den..."></textarea>
+
+                <button id="askButton">Ask Matte Helper</button>
+            </section>
+
+            <section class="card">
+                <h2>Svar</h2>
+                <pre id="answer" class="answer"></pre>
+            </section>
+        </main>
+
+        <script src="app.js"></script>
+    </body>
+</html>
