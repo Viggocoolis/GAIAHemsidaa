@@ -1,0 +1,47 @@
+[
+  {
+    "id": "g1_add_01",
+    "level": "Grundskola åk 1–3",
+    "topic": "Addition",
+    "difficulty": "Lätt",
+    "question": "1 + 4 = ?",
+    "answer": "5",
+    "answerType": "number"
+  },
+  {
+    "id": "g1_sub_01",
+    "level": "Grundskola åk 1–3",
+    "topic": "Subtraktion",
+    "difficulty": "Lätt",
+    "question": "9 - 6 = ?",
+    "answer": "3",
+    "answerType": "number"
+  },
+  {
+    "id": "g2_mult_01",
+    "level": "Grundskola åk 4–6",
+    "topic": "Multiplikation",
+    "difficulty": "Medel",
+    "question": "7 · 8 = ?",
+    "answer": "56",
+    "answerType": "number"
+  },
+  {
+    "id": "g3_frac_01",
+    "level": "Grundskola åk 7–9",
+    "topic": "Bråk",
+    "difficulty": "Medel",
+    "question": "Förenkla bråket 12/18.",
+    "answer": "2/3",
+    "answerType": "text"
+  },
+  {
+    "id": "m1_eq_01",
+    "level": "Gymnasiet Matte 1",
+    "topic": "Ekvationer",
+    "difficulty": "Medel",
+    "question": "Lös ekvationen: 2x + 3 = 11. Vad är x?",
+    "answer": "4",
+    "answerType": "number"
+  }
+]

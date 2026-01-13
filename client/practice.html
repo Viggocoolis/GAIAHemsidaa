@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mattehelper: Uppgifter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Uppgifter</h1>
+        <p>Välj nivå, område och svårhetsgrad.</p>
+
+        <section class="card">
+        <label>Nivå</label>
+        <select id="level">
+            <option>Grundskola åk 1–3</option>
+            <option>Grundskola åk 4–6</option>
+            <option>Grundskola åk 7–9</option>
+            <option>Gymnasiet Matte 1</option>
+            <option>Gymnasiet Matte 2</option>
+            <option>Gymnasiet Matte 3</option>
+            <option>Gymnasiet Matte 4</option>
+            <option>Gymnasiet Matte 5</option>
+        </select>
+        <label>Område</label>
+        <select id = topic></select>
+
+        <label>Svårhetsgrad</label>
+        <select id="difficulty">
+            <option>Lätt</option>
+            <option>Medel</option>
+            <option>Svår</option>
+        </select>
+
+        <button id="nextBtn">Nästa uppgift</button>
+        </section>
+
+        <section class="card">
+            <h2>Uppgift</h2>
+            <div id="question" style="font-size: 18px; line-height: 1.4;">Välj filter och klicka på "Nästa uppgift"</div>
+        
+            <label style="margin-top: 16px;">Ditt svar</label>
+            <input id="answerInput" type="text" placeholder="Skriv ditt svar..." />
+
+            <div style="display:flex; gap:10px; margin-top: 12px;">
+                <button id="checkBtn">Rätta</button>
+                <button id="hintBtn" type="button">Tips</button>
+                <button id="checkAttemptBtn" type="button">Kolla mitt försök (AI verktyg)</button>
+            </div>
+
+            <p id="feedback" style="margin-top: 12px;"></p>
+            <pre id="aibox" class="answer" style="margin-top: 12px;"></pre>
+        </section>
+        
+        <p><a href="index.html" style="color:#9bb7ff;">← Tillbaka till huvudmenyn</a></p>
+    </main>
+
+    <script src="practice.js"></script>
+</body>
+</html>
