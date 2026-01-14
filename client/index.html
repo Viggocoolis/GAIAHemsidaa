@@ -63,7 +63,7 @@
 
     <div class="tm-panel-body">
       <p style="opacity:0.85; margin-top:0;">
-        Snabbverktyg (under development!)
+        <button class="tm-small" id="calcOpen" type="button">Öppna miniräknare</button>
       </p>
 
       <div class="tm-tool-card">
@@ -107,6 +107,62 @@
         <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
         <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
       </div>
+    <div id="calcWindow" class="calc-window" hidden>
+      <div id="calcHeader" class="calc-header">
+        <span>Miniräknare</span>
+        <button id="calcClose" class="calc-close" type="button">✕</button>
+      </div>
+      <div class="calc-body">
+        <div class="calc-display-wrap">
+          <input id="calcDisplay" class="calc-display" inputmode="none" autocomplete="off" spellcheck="false" />
+        </div>
+        
+        <div class="calc-grid">
+          <!-- Rad 1 -->
+           <button data-k="AC">AC</button>
+           <button data-k="DEL">DEL</button>
+           <button data-
+           
+           k="(">(</button>
+          <button data-k=")">)</button>
+          <button data-k="/">÷</button>
+
+          <!-- Rad 2 -->
+           <button data-k="sin(">sin</button>
+      <button data-k="cos(">cos</button>
+      <button data-k="tan(">tan</button>
+      <button data-k="sqrt(">√</button>
+      <button data-k="^">xʸ</button>
+
+          <!-- Rad 3 -->
+           <button data-k="7">7</button>
+          <button data-k="8">8</button>
+          <button data-k="9">9</button>
+          <button data-k="*">×</button>
+          <button data-k="pi">π</button>
+
+          <!-- Rad 4 -->
+           <button data-k="1">1</button>
+          <button data-k="2">2</button>
+          <button data-k="3">3</button>
+          <button data-k="-">+</button>
+          <button data-k="e">e</button>
+
+          <!-- Rad 5 -->
+           <button data-k="1">1</button>
+          <button data-k="2">2</button>
+          <button data-k="3">3 </button>
+          <button data-k="+">+</button>
+          <button data-k="%">%</button>
+
+          <!-- Rad 6 -->
+           <button data-k="0" class="span2">0</button>
+           <button data-k=".">.</button>
+          <button data-k="ANS">ANS</button>
+          <button data-k="=" class="eq">=</button>
+        </div>
+      </div>
+    </div>
     </div>
   </aside>
 
