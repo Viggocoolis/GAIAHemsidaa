@@ -175,8 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ok = isCorrect(current, answerInput.value);
     feedbackEl.textContent = ok
-      ? "✅ Rätt! 🎉"
-      : "❌ Inte riktigt. Prova igen eller ta ett tips.";
+      ? " Rätt! 🎉"
+      : "Inte riktigt rätt. Prova igen eller ta ett tips.";
   });
 
   hintBtn.addEventListener("click", () => {

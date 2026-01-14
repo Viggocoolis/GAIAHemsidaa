@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Matte Helper</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="tools-panel.css" />
 </head>
+
 <body>
   <main class="container">
     <h1>Matte helper</h1>
@@ -37,10 +39,10 @@
       <label>Ditt försök (valfritt)</label>
       <textarea id="attempt" rows="4" placeholder="Skriv hur du försökte lösa den..."></textarea>
 
-      <button id="askBtn">Fråga AI</button>
+      <button id="askBtn" type="button">Fråga AI</button>
     </section>
 
-    <a href ="practice.html"><button>Öva på uppgifter</button></a>
+    <a href="practice.html"><button type="button">Öva på uppgifter</button></a>
 
     <section class="card">
       <h2>Svar</h2>
@@ -48,6 +50,70 @@
     </section>
   </main>
 
+  <!-- ===== TOOLS / WHITEBOARD PANEL ===== -->
+<button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button" title="Verktyg">🧰</button>
+<button class="tm-tools-btn tm-right" id="tmOpenRight" type="button" title="Whiteboard">✍️</button>
+
+
+  <aside class="tm-panel tm-left" id="tmPanelLeft" aria-hidden="true">
+    <div class="tm-panel-header">
+      <strong>Verktyg</strong>
+      <button class="tm-close" id="tmCloseLeft" type="button">✕</button>
+    </div>
+
+    <div class="tm-panel-body">
+      <p style="opacity:0.85; margin-top:0;">
+        Snabbverktyg (under development!)
+      </p>
+
+      <div class="tm-tool-card">
+        <h3 style="margin:0 0 8px 0;">Tips</h3>
+        <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="tm-panel tm-right" id="tmPanelRight" aria-hidden="true">
+    <div class="tm-panel-header">
+      <strong>Whiteboard</strong>
+      <button class="tm-close" id="tmCloseRight" type="button">✕</button>
+    </div>
+
+    <div class="tm-panel-body">
+      <div class="tm-row">
+        <label class="tm-label">Verktyg</label>
+        <div class="tm-row">
+          <button class="tm-tool-btn" id="tmPenBtn" type="button" title="Penna">✏️</button>
+          <button class="tm-tool-btn" id="tmEraserBtn" type="button" title="Suddgummi">🩹</button>
+          <button class="tm-tool-btn" id="tmClearBtn" type="button" title="Rensa whiteboard">🗑️</button>
+        </div>
+      </div>
+
+      <div class="tm-row">
+        <label class="tm-label" for="tmSize">Storlek</label>
+        <input id="tmSize" type="range" min="2" max="28" value="10" />
+      </div>
+
+      <div class="tm-row">
+        <label class="tm-label" for="tmColor">Färg</label>
+        <input id="tmColor" type="color" value="#ffffff" />
+      </div>
+
+      <div class="tm-board-wrap">
+        <canvas id="tmCanvas" width="900" height="900"></canvas>
+      </div>
+
+      <div class="tm-row" style="justify-content: space-between;">
+        <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
+        <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="tm-backdrop" id="tmBackdrop" hidden></div>
+
+  <!-- ===== SCRIPTS (SIST) ===== -->
   <script src="app.js"></script>
+  <script src="tools-panel.js"></script>
 </body>
 </html>

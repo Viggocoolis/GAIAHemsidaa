@@ -1,0 +1,62 @@
+<button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button"> verktyg</button>
+<button class="tm-tools-btn tm-right" id="tmOpenRight" type="button"> Whiteboard</button>
+
+
+<aside class="tm-panel tm-left" id="tmPanelLeft" aria-hidden="true">
+    <div class="tm-panel-header">
+        <strong>verktyg</strong>
+        <button class="tm-close" id="tmCloseLeft" type="button">✕</button>
+    </div>
+
+    <div class="tm-panel-body">
+        <p style="opacity:0.85; margin-top:0;">
+            Snabbverktyg (under development!)
+        </p>
+
+        <div class="tm-tool-card">
+            <h3 style="margin:0 0 8px 0;">Tips</h3>
+            <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
+        </div>
+    </div>
+</aside>
+
+<aside class="tm-panel tm-right" id="tmPanelRight" aria-hidden="true">
+    <div class="tm-panel-header">
+        <strong>Whiteboard</strong>
+        <button class="tm-close" id="tmCloseRight" type="button">✕</button>
+    </div>
+
+    <div class="tm-panel-body">
+        <div class="tm-row">
+            <label class="tm-label">Verktyg</label>
+            <div class="tm-row">
+                <button class="tm-tool-btn" id="tmPenBtn" type="button" title="Penna">✏️</button>
+                <button class="tm-tool-btn" id="tmEraserBtn" type="button" title="Suddgummi">🩹</button>
+                <button class="tm-tool-btn" id="tmClearBtn" type="button" title="Rensa whiteboard">🗑️</button>
+            </div>
+        </div>
+
+        <div class="tm-row">
+            <label class="tm-label" for="tmSize">Storlek</label>
+            <input id="tmSize" type="range" min="2" max="18" value="6" />
+        </div>
+
+        <div class="tm-row">
+            <label class="tm-label" for="tmColor">Färg</label>
+            <input id="tmColor" type="color" value="#ffffff" />
+        </div>
+
+        <div class="tm-board-wrap">
+            <canvas id="tmCanvas" width="900" height="600"></canvas>
+        </div>
+
+        <div class="tm-row" style="justify-content: space-between;">
+            <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
+            <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
+        </div>
+
+    </div>
+</aside>
+
+<!--Backdrop -->
+<div class="tm-backdrop" id="tmBackdrop" hidden></div>
