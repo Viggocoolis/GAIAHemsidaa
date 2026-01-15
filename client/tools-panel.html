@@ -1,62 +1,196 @@
-<button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button"> verktyg</button>
-<button class="tm-tools-btn tm-right" id="tmOpenRight" type="button"> Whiteboard</button>
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Helpers =====
+  const byId = (id) => document.getElementById(id);
+  const safeOn = (el, ev, fn) => { if (el) el.addEventListener(ev, fn); };
 
+  const panelLeft  = byId("tmPanelLeft");
+  const panelRight = byId("tmPanelRight");
+  const backdrop   = byId("tmBackdrop");
 
-<aside class="tm-panel tm-left" id="tmPanelLeft" aria-hidden="true">
-    <div class="tm-panel-header">
-        <strong>verktyg</strong>
-        <button class="tm-close" id="tmCloseLeft" type="button">✕</button>
-    </div>
+  if (!panelLeft || !panelRight || !backdrop) return;
 
-    <div class="tm-panel-body">
-        <p style="opacity:0.85; margin-top:0;">
-            Snabbverktyg (under development!)
-        </p>
+  const openLeftBtn   = byId("tmOpenLeft");
+  const openRightBtn  = byId("tmOpenRight");
+  const closeLeftBtn  = byId("tmCloseLeft");
+  const closeRightBtn = byId("tmCloseRight");
 
-        <div class="tm-tool-card">
-            <h3 style="margin:0 0 8px 0;">Tips</h3>
-            <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
-        </div>
-    </div>
-</aside>
+  function syncAria() {
+    panelLeft.setAttribute("aria-hidden", panelLeft.classList.contains("is-open") ? "false" : "true");
+    panelRight.setAttribute("aria-hidden", panelRight.classList.contains("is-open") ? "false" : "true");
+  }
 
-<aside class="tm-panel tm-right" id="tmPanelRight" aria-hidden="true">
-    <div class="tm-panel-header">
-        <strong>Whiteboard</strong>
-        <button class="tm-close" id="tmCloseRight" type="button">✕</button>
-    </div>
+  function openPanel(side) {
+    backdrop.hidden = false;
 
-    <div class="tm-panel-body">
-        <div class="tm-row">
-            <label class="tm-label">Verktyg</label>
-            <div class="tm-row">
-                <button class="tm-tool-btn" id="tmPenBtn" type="button" title="Penna">✏️</button>
-                <button class="tm-tool-btn" id="tmEraserBtn" type="button" title="Suddgummi">🩹</button>
-                <button class="tm-tool-btn" id="tmClearBtn" type="button" title="Rensa whiteboard">🗑️</button>
-            </div>
-        </div>
+    if (side === "left") panelLeft.classList.add("is-open");
+    if (side === "right") panelRight.classList.add("is-open");
 
-        <div class="tm-row">
-            <label class="tm-label" for="tmSize">Storlek</label>
-            <input id="tmSize" type="range" min="2" max="18" value="6" />
-        </div>
+    syncAria();
+  }
 
-        <div class="tm-row">
-            <label class="tm-label" for="tmColor">Färg</label>
-            <input id="tmColor" type="color" value="#ffffff" />
-        </div>
+  function closePanels() {
+    // flytta fokus bort från knappar som finns i panelen innan vi gömmer den
+    try { document.activeElement?.blur?.(); } catch {}
 
-        <div class="tm-board-wrap">
-            <canvas id="tmCanvas" width="900" height="600"></canvas>
-        </div>
+    panelLeft.classList.remove("is-open");
+    panelRight.classList.remove("is-open");
+    backdrop.hidden = true;
 
-        <div class="tm-row" style="justify-content: space-between;">
-            <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
-            <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
-        </div>
+    panelLeft.setAttribute("aria-hidden", "true");
+    panelRight.setAttribute("aria-hidden", "true");
+  }
 
-    </div>
-</aside>
+  safeOn(openLeftBtn, "click", () => openPanel("left"));
+  safeOn(openRightBtn, "click", () => openPanel("right"));
+  safeOn(closeLeftBtn, "click", closePanels);
+  safeOn(closeRightBtn, "click", closePanels);
+  safeOn(backdrop, "click", closePanels);
 
-<!--Backdrop -->
-<div class="tm-backdrop" id="tmBackdrop" hidden></div>
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePanels();
+  });
+
+  // ===== Whiteboard =====
+  const canvas = byId("tmCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const penBtn    = byId("tmPenBtn");
+  const eraserBtn = byId("tmEraserBtn");
+  const clearBtn  = byId("tmClearBtn");
+
+  const sizeEl   = byId("tmSize");
+  const colorEl  = byId("tmColor");
+  const saveBtn  = byId("tmSave");
+  const statusEl = byId("tmStatus");
+
+  const BG = "#0b1220";
+
+  let canvasReady = false;
+  function setupCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+
+    const rect = canvas.getBoundingClientRect();
+    const cssW = rect.width;
+    const cssH = rect.width * (600 / 900);
+
+    canvas.style.height = `${cssH}px`;
+
+    canvas.width = Math.floor(cssW * dpr);
+    canvas.height = Math.floor(cssH * dpr);
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.globalCompositeOperation = "source-over";
+
+    ctx.fillStyle = BG;
+    ctx.fillRect(0, 0, cssW, cssH);
+  }
+
+  function ensureCanvasReady() {
+    if (canvasReady) return;
+    setupCanvas();
+    canvasReady = true;
+  }
+
+  window.addEventListener("resize", () => {
+    if (!canvasReady) return;
+    canvasReady = false;
+    ensureCanvasReady();
+  });
+
+  safeOn(openRightBtn, "click", () => setTimeout(ensureCanvasReady, 60));
+
+  let drawing = false;
+  let mode = "pen";
+  let last = null;
+
+  function getLineWidth() {
+    return Number(sizeEl?.value || 6);
+  }
+
+  function applyMode() {
+    if (mode === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.strokeStyle = "rgba(0,0,0,1)";
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = colorEl?.value || "#ffffff";
+    }
+    ctx.lineWidth = getLineWidth();
+  }
+
+  function posFromEvent(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+
+  function startDraw(e) {
+    ensureCanvasReady();
+    drawing = true;
+    last = posFromEvent(e);
+    if (statusEl) statusEl.textContent = "Ritar…";
+  }
+
+  function moveDraw(e) {
+    if (!drawing) return;
+    const p = posFromEvent(e);
+
+    applyMode();
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+
+    last = p;
+  }
+
+  function endDraw() {
+    drawing = false;
+    last = null;
+    if (statusEl) statusEl.textContent = "";
+  }
+
+  safeOn(canvas, "mousedown", startDraw);
+  safeOn(window, "mousemove", moveDraw);
+  safeOn(window, "mouseup", endDraw);
+
+  safeOn(canvas, "touchstart", (e) => { e.preventDefault(); startDraw(e); });
+  safeOn(canvas, "touchmove", (e) => { e.preventDefault(); moveDraw(e); });
+  safeOn(canvas, "touchend", (e) => { e.preventDefault(); endDraw(); });
+
+  safeOn(penBtn, "click", () => {
+    mode = "pen";
+    if (penBtn) penBtn.style.opacity = "1";
+    if (eraserBtn) eraserBtn.style.opacity = "0.7";
+  });
+
+  safeOn(eraserBtn, "click", () => {
+    mode = "eraser";
+    if (eraserBtn) eraserBtn.style.opacity = "1";
+    if (penBtn) penBtn.style.opacity = "0.7";
+  });
+
+  safeOn(clearBtn, "click", () => {
+    ensureCanvasReady();
+    const rect = canvas.getBoundingClientRect();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = BG;
+    ctx.fillRect(0, 0, rect.width, rect.height);
+  });
+
+  safeOn(saveBtn, "click", () => {
+    ensureCanvasReady();
+    const link = document.createElement("a");
+    link.download = `mattehelper-whiteboard-${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+
+  if (penBtn) penBtn.style.opacity = "1";
+  if (eraserBtn) eraserBtn.style.opacity = "0.7";
+});

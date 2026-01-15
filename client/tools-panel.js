@@ -3,12 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const byId = (id) => document.getElementById(id);
   const safeOn = (el, ev, fn) => { if (el) el.addEventListener(ev, fn); };
 
-  // Panels (must exist to run)
+ 
   const panelLeft  = byId("tmPanelLeft");
   const panelRight = byId("tmPanelRight");
   const backdrop   = byId("tmBackdrop");
 
-  // If tools panel HTML isn't on this page, do nothing.
+  
   if (!panelLeft || !panelRight || !backdrop) return;
 
   const openLeftBtn  = byId("tmOpenLeft");
@@ -30,12 +30,18 @@ document.addEventListener("DOMContentLoaded", () => {
     syncAria();
   }
 
-  function closePanels() {
-    panelLeft.classList.remove("is-open");
-    panelRight.classList.remove("is-open");
-    backdrop.hidden = true;
-    syncAria();
-  }
+function closePanels() {
+  // flytta fokus bort från knappar som finns i panelen innan vi gömmer den
+  try { document.activeElement?.blur?.(); } catch {}
+
+  panelLeft.classList.remove("is-open");
+  panelRight.classList.remove("is-open");
+  backdrop.hidden = true;
+
+  panelLeft.setAttribute("aria-hidden", "true");
+  panelRight.setAttribute("aria-hidden", "true");
+}
+
 
   safeOn(openLeftBtn, "click", () => openPanel("left"));
   safeOn(openRightBtn, "click", () => openPanel("right"));

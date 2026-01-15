@@ -63,9 +63,8 @@
   </main>
 
   <!-- ===== TOOLS ===== -->
- <button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button" title="Verktyg">🧰</button>
- <button class="tm-tools-btn tm-right" id="tmOpenRight" type="button" title="Whiteboard">✍️</button>
-
+  <button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button" title="Verktyg">🧰</button>
+  <button class="tm-tools-btn tm-right" id="tmOpenRight" type="button" title="Whiteboard">✍️</button>
 
   <aside class="tm-panel tm-left" id="tmPanelLeft" aria-hidden="true">
     <div class="tm-panel-header">
@@ -119,72 +118,66 @@
         <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
         <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
       </div>
-      <div id="calcWindow" class="calc-window" hidden>
-  <div id="calcHeader" class="calc-header">
-    <span>Miniräknare</span>
-    <button id="calcClose" class="calc-close" type="button">✕</button>
-  </div>
-
-  <div class="calc-body">
-    <div class="calc-display-wrap">
-      <input id="calcDisplay" class="calc-display" inputmode="none" autocomplete="off" spellcheck="false" />
-      <div id="calcHint" class="calc-hint">Klicka på räknaren för att aktivera tangentbord</div>
-    </div>
-
-    <div class="calc-grid">
-      <!-- rad 1 -->
-      <button data-k="AC">AC</button>
-      <button data-k="DEL">DEL</button>
-      <button data-k="(">(</button>
-      <button data-k=")">)</button>
-      <button data-k="/">÷</button>
-
-      <!-- rad 2 -->
-      <button data-k="sin(">sin</button>
-      <button data-k="cos(">cos</button>
-      <button data-k="tan(">tan</button>
-      <button data-k="sqrt(">√</button>
-      <button data-k="^">xʸ</button>
-
-      <!-- rad 3 -->
-      <button data-k="7">7</button>
-      <button data-k="8">8</button>
-      <button data-k="9">9</button>
-      <button data-k="*">×</button>
-      <button data-k="pi">π</button>
-
-      <!-- rad 4 -->
-      <button data-k="4">4</button>
-      <button data-k="5">5</button>
-      <button data-k="6">6</button>
-      <button data-k="-">−</button>
-      <button data-k="^2">x²</button>
-
-      <!-- rad 5 -->
-      <button data-k="1">1</button>
-      <button data-k="2">2</button>
-      <button data-k="3">3</button>
-      <button data-k="+">+</button>
-      <button data-k="%">%</button>
-
-      <!-- rad 6 -->
-      <button data-k="0" class="span2">0</button>
-      <button data-k=".">.</button>
-      <button data-k="ANS">ANS</button>
-      <button data-k="=" class="eq">=</button>
-    </div>
-  </div>
-</div>
     </div>
   </aside>
 
   <div class="tm-backdrop" id="tmBackdrop" hidden></div>
+
+  <!-- ===== CALCULATOR WINDOW (UTANFÖR PANELER) ===== -->
+  <div id="calcWindow" class="calc-window" hidden>
+    <div id="calcHeader" class="calc-header">
+      <span>Miniräknare</span>
+    </div>
+
+    <div class="calc-body">
+      <div class="calc-display-wrap">
+        <input id="calcDisplay" class="calc-display" inputmode="none" autocomplete="off" spellcheck="false" />
+        <div id="calcHint" class="calc-hint">Klicka på räknaren för att aktivera tangentbord</div>
+      </div>
+
+      <div class="calc-grid">
+        <button data-k="AC">AC</button>
+        <button data-k="DEL">DEL</button>
+        <button data-k="(">(</button>
+        <button data-k=")">)</button>
+        <button data-k="/">÷</button>
+
+        <button data-k="sin(">sin</button>
+        <button data-k="cos(">cos</button>
+        <button data-k="tan(">tan</button>
+        <button data-k="sqrt(">√</button>
+        <button data-k="^">xʸ</button>
+
+        <button data-k="7">7</button>
+        <button data-k="8">8</button>
+        <button data-k="9">9</button>
+        <button data-k="*">×</button>
+        <button data-k="pi">π</button>
+
+        <button data-k="4">4</button>
+        <button data-k="5">5</button>
+        <button data-k="6">6</button>
+        <button data-k="-">−</button>
+        <button data-k="^2">x²</button>
+
+        <button data-k="1">1</button>
+        <button data-k="2">2</button>
+        <button data-k="3">3</button>
+        <button data-k="+">+</button>
+        <button data-k="%">%</button>
+
+        <button data-k="0" class="span2">0</button>
+        <button data-k=".">.</button>
+        <button data-k="ANS">ANS</button>
+        <button data-k="=" class="eq">=</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== SCRIPTS ===== -->
   <script src="practice.js"></script>
   <script src="tools-panel.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.2/lib/browser/math.js"></script>
   <script src="calculator.js"></script>
-
 </body>
 </html>

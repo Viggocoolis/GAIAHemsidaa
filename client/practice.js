@@ -1,201 +1,186 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // ===== Helpers =====
-  const $ = (id) => document.getElementById(id);
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Matte helper: Uppgifter</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="tools-panel.css" />
+</head>
 
-  function mustGet(id) {
-    const el = $(id);
-    if (!el) {
-      console.error(`Saknar element med id="#${id}" i practice.html`);
-      throw new Error(`Missing element #${id}`);
-    }
-    return el;
-  }
+<body>
+  <main class="container">
+    <h1>Uppgifter</h1>
+    <p>Välj nivå, område och svårhetsgrad.</p>
 
-  function uniq(arr) {
-    return [...new Set(arr)];
-  }
+    <section class="card">
+      <label for="level">Nivå</label>
+      <select id="level">
+        <option>Grundskola åk 1–3</option>
+        <option>Grundskola åk 4–6</option>
+        <option>Grundskola åk 7–9</option>
+        <option>Gymnasiet Matte 1</option>
+        <option>Gymnasiet Matte 2</option>
+        <option>Gymnasiet Matte 3</option>
+        <option>Gymnasiet Matte 4</option>
+        <option>Gymnasiet Matte 5</option>
+      </select>
 
-  function normalize(s) {
-    return (s ?? "")
-      .toString()
-      .trim()
-      .replace(/\s+/g, "")
-      .replace(",", "."); // 1,5 -> 1.5
-  }
+      <label for="topic">Område</label>
+      <select id="topic"></select>
 
-  function isCorrect(problem, userAnswerRaw) {
-    const user = normalize(userAnswerRaw);
-    const correct = normalize(problem.answer);
+      <label for="difficulty">Svårhetsgrad</label>
+      <select id="difficulty">
+        <option>Lätt</option>
+        <option>Medel</option>
+        <option>Svår</option>
+      </select>
 
-    if (!user) return false;
+      <button id="nextBtn" type="button">Nästa uppgift</button>
+      <p id="poolInfo" style="margin-top:10px; opacity:0.85;"></p>
+    </section>
 
-    if (problem.answerType === "number") {
-      const u = Number(user);
-      const c = Number(correct);
-      if (Number.isFinite(u) && Number.isFinite(c)) {
-        return Math.abs(u - c) < 1e-9;
-      }
-      return false;
-    }
+    <section class="card">
+      <h2>Uppgift</h2>
+      <div id="question" style="font-size: 18px; line-height: 1.4;">
+        Välj filter och klicka “Nästa uppgift”.
+      </div>
 
-    // text/exakt match (bra för bråk osv)
-    return user.toLowerCase() === correct.toLowerCase();
-  }
+      <label for="answerInput" style="margin-top:16px;">Ditt svar</label>
+      <input id="answerInput" type="text" placeholder="Skriv ditt svar..." />
 
-  function pickRandom(list) {
-    return list[Math.floor(Math.random() * list.length)];
-  }
+      <div style="display:flex; gap:10px; margin-top:12px; flex-wrap: wrap;">
+        <button id="checkBtn" type="button">Rätta</button>
+        <button id="hintBtn" type="button">Tips</button>
+        <button id="checkAttemptBtn" type="button">Kolla mitt försök (AI verktyg)</button>
+      </div>
 
-  // ===== DOM =====
-  const levelEl = mustGet("level");
-  const topicEl = mustGet("topic");
-  const diffEl = mustGet("difficulty");
+      <p id="feedback" style="margin-top:12px;"></p>
+      <pre id="aiBox" class="answer" style="margin-top:12px; white-space: pre-wrap;"></pre>
+    </section>
 
-  const nextBtn = mustGet("nextBtn");
-  const poolInfo = mustGet("poolInfo");
+    <p><a href="index.html" style="color:#9bb7ff;">← Tillbaka till huvudmenyn</a></p>
+  </main>
 
-  const questionEl = mustGet("question");
-  const answerInput = mustGet("answerInput");
-  const checkBtn = mustGet("checkBtn");
-  const hintBtn = mustGet("hintBtn");
-  const checkAttemptBtn = mustGet("checkAttemptBtn");
+  <!-- ===== TOOLS / WHITEBOARD PANEL ===== -->
+  <button class="tm-tools-btn tm-left" id="tmOpenLeft" type="button" title="Verktyg">🧰</button>
+  <button class="tm-tools-btn tm-right" id="tmOpenRight" type="button" title="Whiteboard">✍️</button>
 
-  const feedbackEl = mustGet("feedback");
-  const aiBox = mustGet("aiBox");
+  <aside class="tm-panel tm-left" id="tmPanelLeft" aria-hidden="true">
+    <div class="tm-panel-header">
+      <strong>Verktyg</strong>
+      <button class="tm-close" id="tmCloseLeft" type="button">✕</button>
+    </div>
 
-  // ===== State =====
-  let ALL = [];
-  let current = null;
+    <div class="tm-panel-body">
+      <div class="tm-tool-card">
+        <h3 style="margin:0 0 8px 0;">Tips</h3>
+        <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
+      </div>
 
-  // ===== Filters =====
-  function setTopicsForLevel(level) {
-    const topics = uniq(ALL.filter(p => p.level === level).map(p => p.topic)).sort();
-    topicEl.innerHTML = topics.map(t => `<option>${t}</option>`).join("");
+      <div class="tm-tool-card" style="margin-top:12px;">
+        <h3 style="margin:0 0 8px 0;">Verktyg</h3>
+        <button class="tm-small" id="calcOpen" type="button">Öppna miniräknare</button>
+      </div>
+    </div>
+  </aside>
 
-    // om nivån saknar topics, visa tomt
-    if (topics.length === 0) {
-      topicEl.innerHTML = `<option>(Inga områden ännu)</option>`;
-    }
-  }
+  <aside class="tm-panel tm-right" id="tmPanelRight" aria-hidden="true">
+    <div class="tm-panel-header">
+      <strong>Whiteboard</strong>
+      <button class="tm-close" id="tmCloseRight" type="button">✕</button>
+    </div>
 
-  function getFiltered() {
-    const level = levelEl.value;
-    const topic = topicEl.value;
-    const difficulty = diffEl.value;
+    <div class="tm-panel-body">
+      <div class="tm-row">
+        <label class="tm-label">Verktyg</label>
+        <div class="tm-row">
+          <button class="tm-tool-btn" id="tmPenBtn" type="button" title="Penna">✏️</button>
+          <button class="tm-tool-btn" id="tmEraserBtn" type="button" title="Suddgummi">🩹</button>
+          <button class="tm-tool-btn" id="tmClearBtn" type="button" title="Rensa whiteboard">🗑️</button>
+        </div>
+      </div>
 
-    return ALL.filter(p =>
-      p.level === level &&
-      p.topic === topic &&
-      p.difficulty === difficulty
-    );
-  }
+      <div class="tm-row">
+        <label class="tm-label" for="tmSize">Storlek</label>
+        <input id="tmSize" type="range" min="2" max="28" value="10" />
+      </div>
 
-  function updatePoolInfo() {
-    const filtered = getFiltered();
-    poolInfo.textContent = `Matchande uppgifter: ${filtered.length}`;
-  }
+      <div class="tm-row">
+        <label class="tm-label" for="tmColor">Färg</label>
+        <input id="tmColor" type="color" value="#ffffff" />
+      </div>
 
-  // ===== Render =====
-  function renderProblem(p) {
-    current = p;
-    questionEl.textContent = p.question;
-    answerInput.value = "";
-    feedbackEl.textContent = "";
-    aiBox.textContent = "";
-  }
+      <div class="tm-board-wrap">
+        <canvas id="tmCanvas" width="900" height="900"></canvas>
+      </div>
 
-  // ===== AI call =====
-  async function callAI(mode, attemptText) {
-    if (!current) {
-      aiBox.textContent = "Välj en uppgift först (klicka “Nästa uppgift”).";
-      return;
-    }
+      <div class="tm-row" style="justify-content: space-between;">
+        <button class="tm-small" id="tmSave" type="button">Spara Whiteboard</button>
+        <span id="tmStatus" style="opacity:0.8; font-size: 13px;"></span>
+      </div>
+    </div>
+  </aside>
 
-    aiBox.textContent = "AI tänker...";
+  <div class="tm-backdrop" id="tmBackdrop" hidden></div>
 
-    try {
-      const payload = {
-        level: current.level,
-        mode, // "hint" eller "check"
-        problem: current.question,
-        attempt: attemptText || ""
-      };
+  <!-- ===== CALCULATOR WINDOW ===== -->
+  <div id="calcWindow" class="calc-window" hidden>
+    <div id="calcHeader" class="calc-header">
+      <span>Miniräknare</span>
+      <button id="calcClose" class="calc-close" type="button">✕</button>
+    </div>
 
-      // OBS: ändra port om din backend kör på 3000 istället
-      const res = await fetch("http://localhost:3001/api/tutor", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+    <div class="calc-body">
+      <div class="calc-display-wrap">
+        <input id="calcDisplay" class="calc-display" inputmode="none" autocomplete="off" spellcheck="false" />
+        <div id="calcHint" class="calc-hint">Klicka på räknaren för att aktivera tangentbord</div>
+      </div>
 
-      // Om backend returnerar 500/401 osv:
-      if (!res.ok) {
-        const text = await res.text();
-        aiBox.textContent =
-          `Serverfel (${res.status}).\n\n` +
-          `Tips: kolla server-terminalen.\n\n` +
-          `Svar från server:\n${text.slice(0, 400)}`;
-        return;
-      }
+      <div class="calc-grid">
+        <button data-k="AC">AC</button>
+        <button data-k="DEL">DEL</button>
+        <button data-k="(">(</button>
+        <button data-k=")">)</button>
+        <button data-k="/">÷</button>
 
-      const data = await res.json();
-      aiBox.textContent = data.text || "Inget AI-svar.";
-    } catch (e) {
-      console.error(e);
-      aiBox.textContent = "Kunde inte nå AI-servern (är backend igång?).";
-    }
-  }
+        <button data-k="sin(">sin</button>
+        <button data-k="cos(">cos</button>
+        <button data-k="tan(">tan</button>
+        <button data-k="sqrt(">√</button>
+        <button data-k="^">xʸ</button>
 
-  // ===== Events =====
-  levelEl.addEventListener("change", () => {
-    setTopicsForLevel(levelEl.value);
-    updatePoolInfo();
-  });
+        <button data-k="7">7</button>
+        <button data-k="8">8</button>
+        <button data-k="9">9</button>
+        <button data-k="*">×</button>
+        <button data-k="pi">π</button>
 
-  topicEl.addEventListener("change", updatePoolInfo);
-  diffEl.addEventListener("change", updatePoolInfo);
+        <button data-k="4">4</button>
+        <button data-k="5">5</button>
+        <button data-k="6">6</button>
+        <button data-k="-">−</button>
+        <button data-k="^2">x²</button>
 
-  nextBtn.addEventListener("click", () => {
-    const filtered = getFiltered();
-    updatePoolInfo();
+        <button data-k="1">1</button>
+        <button data-k="2">2</button>
+        <button data-k="3">3</button>
+        <button data-k="+">+</button>
+        <button data-k="%">%</button>
 
-    if (filtered.length === 0) {
-      feedbackEl.textContent = "Inga uppgifter matchar dina val ännu.";
-      return;
-    }
+        <button data-k="0" class="span2">0</button>
+        <button data-k=".">.</button>
+        <button data-k="ANS">ANS</button>
+        <button data-k="=" class="eq">=</button>
+      </div>
+    </div>
+  </div>
 
-    renderProblem(pickRandom(filtered));
-  });
+  <!-- ===== SCRIPTS (SIST) ===== -->
+  <script src="practice.js"></script>
+  <script src="tools-panel.js"></script>
 
-  checkBtn.addEventListener("click", () => {
-    if (!current) {
-      feedbackEl.textContent = "Klicka “Nästa uppgift” först.";
-      return;
-    }
-
-    const ok = isCorrect(current, answerInput.value);
-    feedbackEl.textContent = ok
-      ? " Rätt! 🎉"
-      : "Inte riktigt rätt. Prova igen eller ta ett tips.";
-  });
-
-  hintBtn.addEventListener("click", () => {
-    callAI("hint", "");
-  });
-
-  checkAttemptBtn.addEventListener("click", () => {
-    const userAttempt = answerInput.value.trim();
-    callAI("check", userAttempt ? `Mitt svar/försök: ${userAttempt}` : "");
-  });
-
-  // ===== Boot =====
-  async function loadProblems() {
-    const res = await fetch("problems.json");
-    ALL = await res.json();
-
-    setTopicsForLevel(levelEl.value);
-    updatePoolInfo();
-  }
-
-  loadProblems();
-});
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.2/lib/browser/math.js"></script>
+  <script src="calculator.js"></script>
+</body>
+</html>
