@@ -75,6 +75,7 @@
     <div class="tm-panel-body">
       <p style="opacity:0.85; margin-top:0;">
         <button class="tm-small" id="calcOpen" type="button">Miniräknare</button>
+        <button class="tm-small" id="graphOpen" type="button">Graf</button>
       </p>
 
       <div class="tm-tool-card">
@@ -122,6 +123,25 @@
   </aside>
 
   <div class="tm-backdrop" id="tmBackdrop" hidden></div>
+
+  <!-- ==== Graph Window ==== -->
+   <div id="graphWindow" class="graph-window" hidden>
+    <div id="graphHeader" class="graph-header">
+      <span>Graf</span>
+    </div>
+
+    <div class="graph-body">
+      <div class="graph-controls">
+        <input id="graphInput" class="graph-input" placeholder="Skriv t.ex. y = x^2 eller sin(x)"/>
+        <button id="graphAdd" class="graph-btn">Lägg till</button>
+        <button id="grapthClear" class="grapth-btn">Rensa</button>
+      </div>
+
+      <div id="graphList" class="graph-list"></div>
+
+      <div id="plot" class="plot"></div>
+    </div>
+   </div>
 
   <!-- ===== CALCULATOR WINDOW ===== -->
   <div id="calcWindow" class="calc-window" hidden>

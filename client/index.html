@@ -63,12 +63,13 @@
     <div class="tm-panel-body">
       <div class="tm-tool-card">
         <h3 style="margin:0 0 8px 0;">Tips</h3>
-        <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
+        <p style="margin:0; opacity:0.9;">graf kommer vara här senare.</p>
       </div>
 
       <div class="tm-tool-card" style="margin-top:12px;">
         <h3 style="margin:0 0 8px 0;">Verktyg</h3>
         <button class="tm-small" id="calcOpen" type="button">Öppna miniräknare</button>
+        <button class="tm-small" id="graphOpen" type="button">Graf</button>
       </div>
     </div>
   </aside>
@@ -111,6 +112,25 @@
   </aside>
 
   <div class="tm-backdrop" id="tmBackdrop" hidden></div>
+
+  <!-- ==== Graph Window ==== -->
+   <div id="graphWindow" class="graph-window" hidden>
+    <div id="graphHeader" class="graph-header">
+      <span>Graf</span>
+    </div>
+
+    <div class="graph-body">
+      <div class="graph-controls">
+        <input id="graphInput" class="graph-input" placeholder="Skriv t.ex. y = x^2 eller sin(x)"/>
+        <button id="graphAdd" class="graph-btn">Lägg till</button>
+        <button id="grapthClear" class="grapth-btn">Rensa</button>
+      </div>
+
+      <div id="graphList" class="graph-list"></div>
+
+      <div id="plot" class="plot"></div>
+    </div>
+   </div>
 
   <!-- ===== CALCULATOR WINDOW ===== -->
   <div id="calcWindow" class="calc-window" hidden>
