@@ -10,7 +10,7 @@
 
 <body>
   <main class="container">
-    <h1>Uppgifter</h1>
+    <h1>Mattehelper - Övningar</h1>
     <p>Välj nivå, område och svårhetsgrad.</p>
 
     <section class="card">
@@ -74,12 +74,12 @@
 
     <div class="tm-panel-body">
       <p style="opacity:0.85; margin-top:0;">
-        <button class="tm-small" id="calcOpen" type="button">Öppna miniräknare</button>
+        <button class="tm-small" id="calcOpen" type="button">Miniräknare</button>
       </p>
 
       <div class="tm-tool-card">
         <h3 style="margin:0 0 8px 0;">Tips</h3>
-        <p style="margin:0; opacity:0.9;">Miniräknare/graf kommer vara här senare.</p>
+        <p style="margin:0; opacity:0.9;">Fler verktyg kommer senare.</p>
       </div>
     </div>
   </aside>
@@ -123,10 +123,12 @@
 
   <div class="tm-backdrop" id="tmBackdrop" hidden></div>
 
-  <!-- ===== CALCULATOR WINDOW (UTANFÖR PANELER) ===== -->
+  <!-- ===== CALCULATOR WINDOW ===== -->
   <div id="calcWindow" class="calc-window" hidden>
     <div id="calcHeader" class="calc-header">
       <span>Miniräknare</span>
+      <!-- (du kan ha kvar X eller ta bort, toggle-knappen räcker) -->
+      <button id="calcClose" class="calc-close" type="button" style="display:none;">✕</button>
     </div>
 
     <div class="calc-body">
@@ -175,9 +177,11 @@
   </div>
 
   <!-- ===== SCRIPTS ===== -->
-  <script src="practice.js"></script>
   <script src="tools-panel.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.2/lib/browser/math.js"></script>
   <script src="calculator.js"></script>
+
+  <script src="practice.js"></script>
 </body>
 </html>
