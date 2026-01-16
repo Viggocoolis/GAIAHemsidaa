@@ -230,3 +230,107 @@
     overflow: auto;
   }
 }
+
+/*---Graf fönster/window---*/
+.graph-window {
+  position: fixed;
+  left: 60px;
+  top: 120px;
+  width: 520px;
+  max-width: calc(100vw - 24px);
+  height: 520px;
+  max-height: calc(100vh - 24px);
+  z-index: 21000;
+  border: 1px solid #2a3a66;
+  border-radius: 16px;
+  background: rgba(15, 23, 48, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  overflow: hidden;
+}
+
+.graph-header {
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #2a3a66;
+  font-weight: 900;
+  color: #e8eefc;
+}
+
+.graph-body{
+  padding: 10px;
+  height: calc(100% - 44px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.graph-controls{
+  display: flex;
+  gap: 8px;
+  flex: wrap;
+}
+
+.graph-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #2a3a66;
+  background: #0b1220;
+  color: #e8eefc;
+}
+
+.graph-btn{
+  border: 1px solid #2a3a66;
+  background: #121b2f;
+  color: #e8eefc;
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.graph-list{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 90px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.graph-row{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(42,58,102,0.6);
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: rgba(11,18,32,0.6);
+  color: #e8eefc;
+  font-size: 14px;
+}
+
+.graph-del {
+  margin-left: auto;
+  border: 1px solid #2a3a66;
+  background: #0f1730;
+  color: #e8eefc;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.plot {
+  flex: 1;
+  border: 1px solid #2a3a66;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b1220;
+}
