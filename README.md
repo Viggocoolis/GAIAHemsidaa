@@ -1,8 +1,8 @@
 
 readme.MD
 
-# Namn på projektet
-Matte Helper
+# Matte Helper
+
 
 Viggo Wessén
 
