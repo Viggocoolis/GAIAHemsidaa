@@ -14,28 +14,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!openBtn || !win || !header || !plotDiv || !math || !Plotly) return;
 
-  //open/close
-  function openGraph() { win.hidden = false; }
-  function closeGraph() { win.hidden = true; }
-  function toggleGraph() { win.hidden ? openGraph() : closeGraph(); }
+  
+  // OPEN / CLOSE
+
+  function toggleGraph() {
+    win.hidden = !win.hidden;
+    if (!win.hidden) setTimeout(drawAll, 0);
+  }
 
   openBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     toggleGraph();
-    if (!win.hidden) setTimeout(drawAll, 0);
   });
 
-  //Drag window
+  
+  // Drag window
+
   let dragging = false, startX=0, startY=0, startLeft=0, startTop=0;
 
   header.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
     dragging = true;
     header.setPointerCapture(e.pointerId);
-
-    win.style.transform = "none";
-
     startX = e.clientX;
     startY = e.clientY;
     startLeft = win.offsetLeft;
@@ -44,25 +44,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   header.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    const newLeft = Math.max(8, Math.min(window.innerWidth - 80, startLeft + dx));
-    const newTop  = Math.max(8, Math.min(window.innerHeight - 80, startTop + dy));
-
-    win.style.left = `${newLeft}px`;
-    win.style.top  = `${newTop}px`;
+    win.style.left = startLeft + (e.clientX - startX) + "px";
+    win.style.top  = startTop  + (e.clientY - startY) + "px";
   });
 
-  header.addEventListener("pointerup", () => { dragging = false; });
+  header.addEventListener("pointerup", () => dragging = false);
 
-  //Data model
-  let funcs = []; 
+  
+  // Data model
+  let funcs = [];
 
   function normalizeExpr(str) {
-    let s = str.trim();
-    s = s.replace(/^y\s*=\s*/i, ""); 
-    return s;
+    return str.replace(/^y\s*=\s*/i, "").trim();
   }
 
   function addFunction(expr) {
@@ -83,82 +76,93 @@ document.addEventListener("DOMContentLoaded", () => {
       const chk = document.createElement("input");
       chk.type = "checkbox";
       chk.checked = f.enabled;
-      chk.addEventListener("change", () => {
-        f.enabled = chk.checked;
-        drawAll();
-      });
+      chk.onchange = () => { f.enabled = chk.checked; drawAll(); };
 
       const label = document.createElement("span");
       label.textContent = `y = ${f.expr}`;
 
       const del = document.createElement("button");
-      del.className = "graph-del";
       del.textContent = "✕";
-      del.addEventListener("click", () => {
+      del.onclick = () => {
         funcs.splice(idx, 1);
         renderList();
         drawAll();
-      });
+      };
 
-      row.appendChild(chk);
-      row.appendChild(label);
-      row.appendChild(del);
+      row.append(chk, label, del);
       list.appendChild(row);
     });
   }
 
+  
   function makeTrace(expr) {
     const compiled = math.compile(expr);
-
     const x = [];
     const y = [];
 
-    for (let i = -10; i <= 10; i += 0.1) {
-      x.push(i);
+    
+    const RANGE = 200;
+    const STEP = 0.05;
+
+    for (let i = -RANGE; i <= RANGE; i += STEP) {
       try {
         const val = compiled.evaluate({ x: i });
-        // Skippa om den blir konstig
-        if (typeof val !== "number" || !isFinite(val)) {
+        if (!isFinite(val)) {
+          x.push(i);
           y.push(null);
         } else {
+          x.push(i);
           y.push(val);
         }
       } catch {
+        x.push(i);
         y.push(null);
       }
     }
 
-    return { x, y, type: "scatter", mode: "lines", name: `y=${expr}` };
+    return {
+      x, y,
+      type: "scatter",
+      mode: "lines",
+      line: { width: 2 },
+      name: `y = ${expr}`,
+      connectgaps: false
+    };
   }
 
   function drawAll() {
-    const enabled = funcs.filter(f => f.enabled);
+    const traces = funcs.filter(f => f.enabled).map(f => makeTrace(f.expr));
 
-    const traces = enabled.map(f => makeTrace(f.expr));
-
-    const layout = {
-      margin: { l: 40, r: 20, t: 20, b: 40 },
-      xaxis: { zeroline: true, gridcolor: "rgba(255,255,255,0.08)" },
-      yaxis: { zeroline: true, gridcolor: "rgba(255,255,255,0.08)" },
+    Plotly.newPlot(plotDiv, traces, {
+      dragmode: "pan",
+      margin: { l: 50, r: 20, t: 20, b: 50 },
+      xaxis: {
+        zeroline: true,
+        gridcolor: "rgba(255,255,255,0.08)",
+        autorange: true
+      },
+      yaxis: {
+        zeroline: true,
+        gridcolor: "rgba(255,255,255,0.08)",
+        autorange: true
+      },
       paper_bgcolor: "rgba(0,0,0,0)",
       plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: "#e8eefc" }
-    };
-
-    Plotly.newPlot(plotDiv, traces, layout, {
+    }, {
       responsive: true,
-      displayModeBar: true
+      scrollZoom: true
     });
   }
 
-  //knappar
-  addBtn.addEventListener("click", () => {
+  
+  addBtn.onclick = () => {
     addFunction(input.value);
     input.value = "";
     input.focus();
-  });
+  };
 
-  input.addEventListener("keydown", (e) => {
+  input.addEventListener("keydown", e => {
     if (e.key === "Enter") {
       e.preventDefault();
       addFunction(input.value);
@@ -166,12 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn.onclick = () => {
     funcs = [];
     renderList();
     drawAll();
-  });
+  };
 
- 
+
   addFunction("x^2");
 });
