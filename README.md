@@ -15,3 +15,7 @@ NOTE: borde finnas med någon slags tutorial eller video med i filen för hur ma
 OBS: AI'n som svarar på ens frågor är från en chatgpt och är gpt-4o-mini, den slösar inte mycket av mina tokens men har ej oändligt med tokens, ungefär 6$ Cirka 55kr är tillgänglig för nycklen, dock borde det räcka i över ett år eftersom gpt-4o-mini använder få tokens per prompt. 
 
 
+Användning i detta program:
+Frontend: javascript, HTML5, CSS3, Plotly.js, math.js, Pointer Events.API
+Backend: Node.js, Express.js, OpenAI API, dotenv, cors.
+
